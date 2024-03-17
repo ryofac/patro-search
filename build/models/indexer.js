@@ -49,7 +49,7 @@ export class Indexer {
                 avaliableLinks.push(actualLink);
             });
             // Salvando essa página indexada na persistência de páginas criadas:
-            this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks));
+            this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body));
             console.log("Página " + pageTitle + " salva!");
             FileUtils.savePageFile(pageTitle, body);
             // Passeando por todos os links presentes na página
@@ -60,5 +60,8 @@ export class Indexer {
                 yield this.index(link);
             }
         });
+    }
+    printAllPages() {
+        this.pageManager.printAllPages();
     }
 }

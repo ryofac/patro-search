@@ -51,7 +51,7 @@ export class Indexer {
         })
 
         // Salvando essa página indexada na persistência de páginas criadas:
-        this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks));
+        this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body));
 
         console.log("Página " + pageTitle + " salva!");
 
@@ -62,9 +62,12 @@ export class Indexer {
             if(this.pageManager.isPageIndexed(link)){
                 continue
             }
-            
             await this.index(link);
         }
 
+    }
+
+    printAllPages(): void{
+        this.pageManager.printAllPages();
     }
 }

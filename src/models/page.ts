@@ -6,17 +6,23 @@ export class Page {
     private _links : Array<string>;
     private _points: number = 0;
     private _evaluation: Evaluation;
+    private _content: string;
     
 
-    constructor(title: string, indexUrl: string, links: Array<string>){
+    constructor(title: string, indexUrl: string, links: Array<string>, content: string){
         this._title = title;
         this._indexUrl = indexUrl;
         this._links = links;
         this._evaluation = new Evaluation();
+        this._content = content;
     }
 
     get indexUrl(): string{
         return this._indexUrl;
+    }
+
+    get content(): string{
+        return this._content;
     }
 
     set indexUrl(newValue){
