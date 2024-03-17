@@ -3,18 +3,19 @@ import { Evaluation } from "./evaluation.js";
 export class Page {
     private _title: string
     private _indexUrl: string
+    private _date: Date | undefined;
     private _links : Array<string>;
-    private _points: number = 0;
     private _evaluation: Evaluation;
     private _content: string;
     
 
-    constructor(title: string, indexUrl: string, links: Array<string>, content: string){
+    constructor(title: string, indexUrl: string, links: Array<string>, content: string, date: Date | undefined){
         this._title = title;
         this._indexUrl = indexUrl;
         this._links = links;
         this._evaluation = new Evaluation();
         this._content = content;
+        this._date = date;
     }
 
     get indexUrl(): string{
@@ -37,13 +38,15 @@ export class Page {
         this.title = newTitle;
     }
 
-
-    get points(): string{
-        return this._title;
+    get evaluation() {
+        return this._evaluation;
     }
-    
-    set points(newPoints: number){
-        this.points = newPoints;
+
+    get date() {
+        return this._date;
+    }
+    get links() {
+        return this._links;
     }
 
     

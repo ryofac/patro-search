@@ -13,6 +13,10 @@ export class PageManager {
         }
         this.indexedPages.push(newPage);
     }
+    findPageByURL(url) {
+        const pageFound = this._indexedPages.find(page => page.indexUrl === url);
+        return pageFound;
+    }
     isPageIndexed(linkToBeVerified) {
         for (let page of this.indexedPages) {
             if (page.indexUrl.includes(linkToBeVerified)) {

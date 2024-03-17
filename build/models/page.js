@@ -1,12 +1,12 @@
 import { Evaluation } from "./evaluation.js";
 export class Page {
-    constructor(title, indexUrl, links, content) {
-        this._points = 0;
+    constructor(title, indexUrl, links, content, date) {
         this._title = title;
         this._indexUrl = indexUrl;
         this._links = links;
         this._evaluation = new Evaluation();
         this._content = content;
+        this._date = date;
     }
     get indexUrl() {
         return this._indexUrl;
@@ -23,10 +23,13 @@ export class Page {
     set title(newTitle) {
         this.title = newTitle;
     }
-    get points() {
-        return this._title;
+    get evaluation() {
+        return this._evaluation;
     }
-    set points(newPoints) {
-        this.points = newPoints;
+    get date() {
+        return this._date;
+    }
+    get links() {
+        return this._links;
     }
 }

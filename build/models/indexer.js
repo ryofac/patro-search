@@ -21,7 +21,7 @@ export class Indexer {
     }
     // Aplica a indexação das páginas
     index(siteUrl) {
-        var _a;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             // Pegando a resposta da requisição do site
             const response = yield got(siteUrl).catch((err) => {
@@ -48,8 +48,19 @@ export class Indexer {
                 const actualLink = String($(tagA).attr("href"));
                 avaliableLinks.push(actualLink);
             });
+            // Pegando a data de criação:
+            const dateRegex = /(\d{2}\/\d{2}\/\d{4})/;
+            const dataStr = (_b = $("p").text().match(dateRegex)) === null || _b === void 0 ? void 0 : _b[0];
+            let date;
+            if (dataStr) {
+                const [day, month, year] = dataStr.split('/').map(Number);
+                date = new Date(year, month, day);
+            }
+            else {
+                date = undefined;
+            }
             // Salvando essa página indexada na persistência de páginas criadas:
-            this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body));
+            this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body, date));
             console.log("Página " + pageTitle + " salva!");
             FileUtils.savePageFile(pageTitle, body);
             // Passeando por todos os links presentes na página

@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Indexer } from "../models/indexer.js";
+import { Searcher } from "../models/searcher.js";
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const indexador = new Indexer();
+        const buscador = new Searcher(indexador);
         const siteToIndex = "https://meidesu.github.io/movies-pages/interestelar.html";
         yield indexador.index(siteToIndex);
         indexador.printAllPages();

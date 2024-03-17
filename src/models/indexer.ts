@@ -3,8 +3,6 @@ import { PageManager } from '../manager/pageManager.js';
 import { RequestNotCompletedError } from '../err/requestNotCompletedError.js';
 import { FileUtils } from '../utils/fileUtils.js';
 
-
-
 import got from "got";
 import { Page } from './page.js';
 
@@ -50,8 +48,20 @@ export class Indexer {
             avaliableLinks.push(actualLink);
         })
 
+        // Pegando a data de criação:
+        const dateRegex = /(\d{2}\/\d{2}\/\d{4})/
+        const dataStr = $("p").text().match(dateRegex)?.[0];
+
+        let date: Date | undefined;
+        if(dataStr){
+            const [day, month, year] = dataStr.split('/').map(Number);
+            date = new Date(year, month, day);
+        } else {
+            date = undefined;
+        }
+
         // Salvando essa página indexada na persistência de páginas criadas:
-        this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body));
+        this.pageManager.createPage(new Page(pageTitle, siteUrl, avaliableLinks, body, date));
 
         console.log("Página " + pageTitle + " salva!");
 

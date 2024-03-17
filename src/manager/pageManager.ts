@@ -10,13 +10,17 @@ export class PageManager {
     }
 
     createPage(newPage: Page) : void {
-
         if(this.isPageIndexed(newPage.indexUrl)){
             console.log("PÁGINA " + newPage.title + "Já indexada, skipando");
             return;
         }
         this.indexedPages.push(newPage);
     }
+
+    findPageByURL(url: string): Page | undefined {
+        const pageFound = this._indexedPages.find(page => page.indexUrl === url);
+        return pageFound;
+    } 
 
     isPageIndexed(linkToBeVerified: string) : boolean {
         for(let page of this.indexedPages){
