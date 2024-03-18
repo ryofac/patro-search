@@ -14,8 +14,8 @@ function main() {
         const indexador = new Indexer();
         const buscador = new Searcher(indexador);
         const siteToIndex = "https://meidesu.github.io/movies-pages/interestelar.html";
-        yield indexador.index(siteToIndex);
-        indexador.printAllPages();
+        yield buscador.initializeSearcher();
+        buscador.search("matrix");
     });
 }
 main();

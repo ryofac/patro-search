@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { load } from "cheerio";
 // Classe encarregada de buscar e atribuir as pontuações das páginas de acordo com um termo de busca
 export class Searcher {
@@ -24,13 +33,16 @@ export class Searcher {
     // Inicializando o buscador => atribuindo o indexador e setando o ponto de início 
     // para ele indexar as páginas
     initializeSearcher(startPoint) {
-        this.indexer.index(startPoint || this.defaultStartPoint);
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.indexer.index(startPoint || this.defaultStartPoint);
+        });
     }
     // Pesquisa geral
     search(searchTerm) {
         this.searchOcurrencies(searchTerm);
         this.calcFreshiness();
-        this.rank();
+        this.calcReference();
+        this.showResults();
     }
     // Contando as ocorrências que de um certo termo dentro das tags das páginas e atribuindo a pontuação nas páginas
     searchOcurrencies(searchTerm) {
@@ -107,9 +119,23 @@ export class Searcher {
                 const found = this.pageManager.findPageByURL(link);
                 if (!found)
                     return;
-                found.evaluation.autorityPoints += 20;
-                // Ryan: tô terminando aqui
+                found.evaluation.autorityPoints += this.multipliers.autority;
+                if (page.indexUrl == link) {
+                    found.evaluation.autoReferencePenalty += this.multipliers.autoreferencePenalty;
+                }
             });
+        });
+    }
+    // Função de teste pra mostrar os resultados
+    showResults() {
+        const indexedPages = this.pageManager.indexedPages;
+        console.log("\n >>> RESULTADOS: ");
+        indexedPages.forEach(page => {
+            console.log("PÁGINA: " + page.title);
+            console.log("DATA: " + page.date);
+            console.log("TOTAL DE PONTOS: " + page.evaluation.getTotalPoints());
+            console.log("EVALUATION:");
+            console.log(JSON.stringify(page.evaluation, null, 2));
         });
     }
     // função encarregada de rankear os resultados a fim de separar as estatísticas para cada um

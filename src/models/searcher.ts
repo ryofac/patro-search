@@ -38,8 +38,8 @@ export class Searcher {
 
     // Inicializando o buscador => atribuindo o indexador e setando o ponto de início 
     // para ele indexar as páginas
-    initializeSearcher(startPoint?: string){
-        this.indexer.index(startPoint || this.defaultStartPoint)
+    async initializeSearcher(startPoint?: string){
+       await this.indexer.index(startPoint || this.defaultStartPoint)
 
     }
 
@@ -48,7 +48,8 @@ export class Searcher {
     search(searchTerm: string){
         this.searchOcurrencies(searchTerm);
         this.calcFreshiness();
-        this.rank();        
+        this.calcReference();
+        this.showResults();
     }
 
     // Contando as ocorrências que de um certo termo dentro das tags das páginas e atribuindo a pontuação nas páginas
@@ -148,11 +149,29 @@ export class Searcher {
             page.links.forEach(link => {
                 const found = this.pageManager.findPageByURL(link);
                 if(!found) return;
-                found.evaluation.autorityPoints += 20;
-                // Ryan: tô terminando aqui
+                found.evaluation.autorityPoints += this.multipliers.autority;
+
+                if(page.indexUrl == link){
+                    found.evaluation.autoReferencePenalty += this.multipliers.autoreferencePenalty
+                }
             })
 
         })
+    }
+
+    // Função de teste pra mostrar os resultados
+    showResults(){
+        const indexedPages = this.pageManager.indexedPages;
+
+        console.log("\n >>> RESULTADOS: ")
+        indexedPages.forEach(page => {
+            console.log("PÁGINA: " + page.title);
+            console.log("DATA: " + page.date)
+            console.log("TOTAL DE PONTOS: " + page.evaluation.getTotalPoints())
+            console.log("EVALUATION:")
+            console.log(JSON.stringify(page.evaluation, null, 2))
+        })
+
     }
 
 
