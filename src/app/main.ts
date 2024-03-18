@@ -6,8 +6,9 @@ async function main() {
     const buscador: Searcher = new Searcher(indexador);
     const siteToIndex: string = "https://meidesu.github.io/movies-pages/interestelar.html";
 
-    await indexador.index(siteToIndex);
-    indexador.printAllPages();
+    await buscador.initializeSearcher();
+
+    buscador.search("matrix");
 
 
 }
