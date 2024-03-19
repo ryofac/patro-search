@@ -7,6 +7,6 @@
     "p" : 5,
     "a" : 2,
     "freshContent" : 30,
-    "freshContentPenalty" : 5, 
+    "freshContentPenalty" : 0, 
     "autoreferencePenalty" : 20
 }

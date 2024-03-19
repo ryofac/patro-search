@@ -62,6 +62,7 @@ export abstract class View {
 
     clearTerminal(): void {
         console.clear();
+        console.clear();
     }
 
     moveCursorToLine(lineNumber: number): void{

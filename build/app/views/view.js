@@ -36,6 +36,7 @@ export class View {
     }
     clearTerminal() {
         console.clear();
+        console.clear();
     }
     moveCursorToLine(lineNumber) {
         process.stdout.write(`\x1b[${lineNumber}H`);

@@ -11,6 +11,7 @@ import { question } from "readline-sync";
 import { View } from "./view.js";
 import chalk from "chalk";
 import { SearcherView } from "./searcherView.js";
+import { AlterParamsView } from "./alterParamsView.js";
 export class MainMenuView extends View {
     constructor(viewHandler, searcher) {
         super(viewHandler);
@@ -28,6 +29,7 @@ export class MainMenuView extends View {
         });
     }
     selectView(optionNumber) {
+        this.clearTerminal();
         switch (optionNumber) {
             case 0:
                 this.viewHandler.goBackView();
@@ -37,8 +39,7 @@ export class MainMenuView extends View {
                 this.viewHandler.goToView(new SearcherView(this.viewHandler, this.searcher));
                 break;
             case 2:
-                // TODO: fazer uma view de alterar os parâmetros
-                // this.viewHandler.goToView(new AlterParamsView(this.viewHandler, this.searcher));
+                this.viewHandler.goToView(new AlterParamsView(this.viewHandler, this.searcher));
                 break;
         }
     }

@@ -4,6 +4,7 @@ import chalk from "chalk";
 import { Searcher } from "../../models/searcher.js";
 import { SearcherView } from "./searcherView.js";
 import { ViewHandler } from "./viewHandler.js";
+import { AlterParamsView } from "./alterParamsView.js";
 
 export class MainMenuView extends View {
 
@@ -30,6 +31,7 @@ export class MainMenuView extends View {
     
 
     private selectView(optionNumber: number) : void {
+        this.clearTerminal();
 
         switch(optionNumber){
             case 0:
@@ -42,8 +44,7 @@ export class MainMenuView extends View {
                 break;
             
             case 2:
-                // TODO: fazer uma view de alterar os parâmetros
-                // this.viewHandler.goToView(new AlterParamsView(this.viewHandler, this.searcher));
+                this.viewHandler.goToView(new AlterParamsView(this.viewHandler, this.searcher));
                 break;
             
         }
