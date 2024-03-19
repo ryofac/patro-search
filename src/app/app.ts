@@ -4,7 +4,7 @@ import { MainMenuView } from "./views/mainMenu.js";
 import { Searcher } from "../models/searcher.js";
 import { Indexer } from "../models/indexer.js";
 
-class App {
+export class App {
     private viewHandler: ViewHandler = new ViewHandler();
 
     private indexer: Indexer = new Indexer();
@@ -27,9 +27,4 @@ class App {
 
 }
 
-function main(){
-   const app: App = new App();
-   app.run();
-    
-}
-main();
+

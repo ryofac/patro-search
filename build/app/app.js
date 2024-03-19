@@ -11,7 +11,7 @@ import { ViewHandler } from "./views/viewHandler.js";
 import { MainMenuView } from "./views/mainMenu.js";
 import { Searcher } from "../models/searcher.js";
 import { Indexer } from "../models/indexer.js";
-class App {
+export class App {
     constructor() {
         this.viewHandler = new ViewHandler();
         this.indexer = new Indexer();
@@ -29,8 +29,3 @@ class App {
         });
     }
 }
-function main() {
-    const app = new App();
-    app.run();
-}
-main();
