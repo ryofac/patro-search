@@ -25,6 +25,7 @@ export class PageManager {
         }
         return false;
     }
+    /** Exibe todas as páginas indexadas. */
     printAllPages() {
         console.log("PÁGINAS INDEXADAS: " + this.indexedPages.length);
         console.log(JSON.stringify(this.indexedPages, null, 2));

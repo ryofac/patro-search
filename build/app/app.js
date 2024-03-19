@@ -11,26 +11,26 @@ import { ViewHandler } from "./views/viewHandler.js";
 import { MainMenuView } from "./views/mainMenu.js";
 import { Searcher } from "../models/searcher.js";
 import { Indexer } from "../models/indexer.js";
-class App {
+export class App {
     constructor() {
+        /** Referência da viewHandler */
         this.viewHandler = new ViewHandler();
         this.indexer = new Indexer();
         this.searcher = new Searcher(this.indexer);
         this.baseView = new MainMenuView(this.viewHandler, this.searcher);
     }
+    /** Inicia a aplização */
     run() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            // Inicializa o indexador
             yield this.searcher.initializeSearcher();
+            // Inicializa a view base
             this.viewHandler.goToView(this.baseView);
+            // Loop principal
             do {
                 yield ((_a = this.viewHandler.getActualView()) === null || _a === void 0 ? void 0 : _a.execute());
             } while (!this.viewHandler.isEmpty());
         });
     }
 }
-function main() {
-    const app = new App();
-    app.run();
-}
-main();

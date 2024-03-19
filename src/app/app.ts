@@ -4,7 +4,8 @@ import { MainMenuView } from "./views/mainMenu.js";
 import { Searcher } from "../models/searcher.js";
 import { Indexer } from "../models/indexer.js";
 
-class App {
+export class App {
+    /** Referência da viewHandler */
     private viewHandler: ViewHandler = new ViewHandler();
 
     private indexer: Indexer = new Indexer();
@@ -13,12 +14,15 @@ class App {
     private baseView : View = new MainMenuView(this.viewHandler, this.searcher);
     
 
+    /** Inicia a aplização */
     public async run(): Promise<void>{
-        
+        // Inicializa o indexador
         await this.searcher.initializeSearcher();
 
+        // Inicializa a view base
         this.viewHandler.goToView(this.baseView);
 
+        // Loop principal
         do {
             await this.viewHandler.getActualView()?.execute();
         }
@@ -27,9 +31,4 @@ class App {
 
 }
 
-function main(){
-   const app: App = new App();
-   app.run();
-    
-}
-main();
+
