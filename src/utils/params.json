@@ -1,0 +1,12 @@
+{
+    "autority" : 20,
+    "occurrency" : 5,
+    "meta" : 20,
+    "h1" : 15,
+    "h2" : 10,
+    "p" : 5,
+    "a" : 2,
+    "freshContent" : 30,
+    "freshContentPenalty" : 5, 
+    "autoreferencePenalty" : 20
+}

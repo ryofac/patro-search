@@ -26,6 +26,9 @@ export class Page {
     get evaluation() {
         return this._evaluation;
     }
+    set evaluation(newEval) {
+        this._evaluation = newEval;
+    }
     get date() {
         return this._date;
     }

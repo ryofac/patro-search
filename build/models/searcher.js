@@ -8,9 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { load } from "cheerio";
+import { Evaluation } from "./evaluation.js";
+import { invalidSearchTermError } from "../err/invalidSearchTermError.js";
 // Classe encarregada de buscar e atribuir as pontuações das páginas de acordo com um termo de busca
 export class Searcher {
     constructor(indexer) {
+        this._searchTerm = "";
         // Multiplicadores que podem ser alterados nos critérios de rankeamento
         this.multipliers = {
             autority: 20,
@@ -23,7 +26,7 @@ export class Searcher {
             freshContent: 30,
             freshContentPenalty: 5,
             autoreferencePenalty: 20
-        };
+        }; // TODO: Consertar utils.loadConf() para fazer isso!;
         // O ponto de start padrão do indexador
         this.defaultStartPoint = "https://meidesu.github.io/movies-pages/matrix.html";
         // Colocando valores padrão:
@@ -39,10 +42,11 @@ export class Searcher {
     }
     // Pesquisa geral
     search(searchTerm) {
+        this.resetValues();
+        this._searchTerm = this.treatSearchTerm(searchTerm);
         this.searchOcurrencies(searchTerm);
         this.calcFreshiness();
         this.calcReference();
-        this.showResults();
     }
     // Contando as ocorrências que de um certo termo dentro das tags das páginas e atribuindo a pontuação nas páginas
     searchOcurrencies(searchTerm) {
@@ -119,26 +123,35 @@ export class Searcher {
                 const found = this.pageManager.findPageByURL(link);
                 if (!found)
                     return;
-                found.evaluation.autorityPoints += this.multipliers.autority;
                 if (page.indexUrl == link) {
                     found.evaluation.autoReferencePenalty += this.multipliers.autoreferencePenalty;
+                    return;
                 }
+                found.evaluation.autorityPoints += this.multipliers.autority;
             });
         });
     }
-    // Função de teste pra mostrar os resultados
-    showResults() {
+    resetValues() {
         const indexedPages = this.pageManager.indexedPages;
-        console.log("\n >>> RESULTADOS: ");
         indexedPages.forEach(page => {
-            console.log("PÁGINA: " + page.title);
-            console.log("DATA: " + page.date);
-            console.log("TOTAL DE PONTOS: " + page.evaluation.getTotalPoints());
-            console.log("EVALUATION:");
-            console.log(JSON.stringify(page.evaluation, null, 2));
+            page.evaluation = new Evaluation();
         });
     }
     // função encarregada de rankear os resultados a fim de separar as estatísticas para cada um
     rank() {
+        const toShow = this.pageManager.indexedPages
+            .filter(page => page.evaluation.frequencyPoints > 0) // Filtrando as que podem ser mostradas
+            .sort((a, b) => b.evaluation.getTotalPoints() - a.evaluation.getTotalPoints()); // Ordenando por maior quantidade de pontos
+        return toShow;
+    }
+    treatSearchTerm(searchTerm) {
+        if (searchTerm === "") {
+            throw new invalidSearchTermError("Termo de busca vazio");
+        }
+        searchTerm = searchTerm.toLowerCase().trimEnd().trimStart();
+        return searchTerm;
+    }
+    get searchTerm() {
+        return this._searchTerm;
     }
 }

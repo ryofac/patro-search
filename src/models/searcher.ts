@@ -2,10 +2,14 @@ import { load } from "cheerio";
 import { PageManager } from "../manager/pageManager.js";
 import { Indexer } from "./indexer.js";
 import { MultipliyerOptions } from "./multipliyerOptions.js";
+import { Page } from "./page.js";
+import { Evaluation } from "./evaluation.js";
+import { invalidSearchTermError } from "../err/invalidSearchTermError.js";
 // Classe encarregada de buscar e atribuir as pontuações das páginas de acordo com um termo de busca
 export class Searcher {
     // O indexador utilizado
     indexer: Indexer;
+    private _searchTerm: string = "";
 
     // Multiplicadores que podem ser alterados nos critérios de rankeamento
     multipliers: MultipliyerOptions = {
@@ -19,7 +23,7 @@ export class Searcher {
         freshContent : 30,
         freshContentPenalty : 5, 
         autoreferencePenalty : 20
-    };
+    } // TODO: Consertar utils.loadConf() para fazer isso!;
     
 
     // O gerenciador de páginas: quem controla as páginas indexadas
@@ -43,13 +47,13 @@ export class Searcher {
 
     }
 
-
     // Pesquisa geral
     search(searchTerm: string){
+        this.resetValues();
+        this._searchTerm = this.treatSearchTerm(searchTerm);
         this.searchOcurrencies(searchTerm);
         this.calcFreshiness();
         this.calcReference();
-        this.showResults();
     }
 
     // Contando as ocorrências que de um certo termo dentro das tags das páginas e atribuindo a pontuação nas páginas
@@ -149,27 +153,22 @@ export class Searcher {
             page.links.forEach(link => {
                 const found = this.pageManager.findPageByURL(link);
                 if(!found) return;
-                found.evaluation.autorityPoints += this.multipliers.autority;
 
                 if(page.indexUrl == link){
                     found.evaluation.autoReferencePenalty += this.multipliers.autoreferencePenalty
+                    return;
                 }
+
+                found.evaluation.autorityPoints += this.multipliers.autority;
             })
 
         })
     }
 
-    // Função de teste pra mostrar os resultados
-    showResults(){
+    resetValues(){
         const indexedPages = this.pageManager.indexedPages;
-
-        console.log("\n >>> RESULTADOS: ")
         indexedPages.forEach(page => {
-            console.log("PÁGINA: " + page.title);
-            console.log("DATA: " + page.date)
-            console.log("TOTAL DE PONTOS: " + page.evaluation.getTotalPoints())
-            console.log("EVALUATION:")
-            console.log(JSON.stringify(page.evaluation, null, 2))
+            page.evaluation = new Evaluation();
         })
 
     }
@@ -178,8 +177,28 @@ export class Searcher {
 
 
     // função encarregada de rankear os resultados a fim de separar as estatísticas para cada um
-    rank() {
+    rank() : Array<Page> {
+        const toShow = this.pageManager.indexedPages
+        .filter(page => page.evaluation.frequencyPoints > 0) // Filtrando as que podem ser mostradas
+        .sort((a, b) => b.evaluation.getTotalPoints() - a.evaluation.getTotalPoints()); // Ordenando por maior quantidade de pontos
+
+        return toShow;
         
     }
+
+    treatSearchTerm(searchTerm: string) {
+        if(searchTerm === ""){
+            throw new invalidSearchTermError("Termo de busca vazio");
+        }
+        searchTerm = searchTerm.toLowerCase().trimEnd().trimStart();
+        return searchTerm;
+
+    }
+
+    get searchTerm() {
+        return this._searchTerm;
+    }
+
+
     
 }
