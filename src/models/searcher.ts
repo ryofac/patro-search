@@ -5,6 +5,7 @@ import { MultipliyerOptions } from "./multipliyerOptions.js";
 import { Page } from "./page.js";
 import { Evaluation } from "./evaluation.js";
 import { invalidSearchTermError } from "../err/invalidSearchTermError.js";
+import chalk from "chalk";
 // Classe encarregada de buscar e atribuir as pontuações das páginas de acordo com um termo de busca
 export class Searcher {
     // O indexador utilizado
@@ -79,6 +80,30 @@ export class Searcher {
 
             // Elencando os elementos do Body
             if (pageBody) {
+                // Definindo os temos mais recorrentes: 
+
+                const wordRegex = new RegExp(`\\b(\\w+\\W+){0,10}${searchTerm}(\\W+\\w+){0,10}\\b`, 'gi');
+                
+                let match;
+
+                // Inicializa o array que irá armazenar os índices de cada ocorrência da palavra
+                let matches = [];
+
+                while ((match = wordRegex.exec(pageBody)) !== null) {
+                    // Pega o texto da ocorrência
+                    let matchText = match[0];
+                    // Retirar quebras de linha e espaços em branco
+                    matchText = matchText.replace(/\s+/g, ' ');
+                    // Substitui a palavra desejada por ela mesma, mas com um fundo amarelo
+                    let re = new RegExp(searchTerm, 'gi');
+                    matchText = matchText.replace(re, chalk.bgYellow.whiteBright(searchTerm));
+                    // Adiciona a ocorrência ao array de ocorrências
+                    matches.push(matchText);
+                }
+
+                page.previewPhrases = matches;
+
+
                 cheer("h1").each((index, element) => {
                     const h1Text = cheer(element).text();
                     occPoints += (h1Text.match(regex) || []).length

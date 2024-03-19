@@ -37,7 +37,7 @@ export class MainMenuView extends View {
             case 0:
                 this.viewHandler.goBackView();
                 this.showText("Fim do programa!", {color: chalk.redBright, centered: true});
-                break;
+                break;  
                 
             case 1:
                 this.viewHandler.goToView(new SearcherView(this.viewHandler, this.searcher));

@@ -1,6 +1,7 @@
 import { Evaluation } from "./evaluation.js";
 export class Page {
     constructor(title, indexUrl, links, content, date) {
+        this._previewPhrases = [];
         this._title = title;
         this._indexUrl = indexUrl;
         this._links = links;
@@ -34,5 +35,11 @@ export class Page {
     }
     get links() {
         return this._links;
+    }
+    set previewPhrases(newPhrases) {
+        this._previewPhrases = newPhrases;
+    }
+    get previewPhrases() {
+        return this._previewPhrases;
     }
 }

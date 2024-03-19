@@ -7,6 +7,7 @@ export class Page {
     private _links : Array<string>;
     private _evaluation: Evaluation;
     private _content: string;
+    private _previewPhrases: Array<string> = [];
     
 
     constructor(title: string, indexUrl: string, links: Array<string>, content: string, date: Date | undefined){
@@ -52,6 +53,15 @@ export class Page {
     get links() {
         return this._links;
     }
+
+    set previewPhrases(newPhrases: Array<string>) {
+        this._previewPhrases = newPhrases;
+    }
+
+    get previewPhrases() {
+        return this._previewPhrases;
+    }
+    
 
     
 
