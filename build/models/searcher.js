@@ -67,7 +67,7 @@ export class Searcher {
             // Elencando os elementos do Body
             if (pageBody) {
                 // Definindo os temos mais recorrentes: 
-                const wordRegex = new RegExp(`\\b(\\w+\\W+){0,10}${searchTerm}(\\W+\\w+){0,10}\\b`, 'gi');
+                const wordRegex = new RegExp(`(\\w+\\W+){0,10}${searchTerm}(\\W+\\w+){0,10}`, 'gi');
                 let match;
                 // Inicializa o array que irá armazenar os índices de cada ocorrência da palavra
                 let matches = [];
