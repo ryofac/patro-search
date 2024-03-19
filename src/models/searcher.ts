@@ -40,9 +40,10 @@ export class Searcher {
         this.pageManager = indexer.pageManager;
     }
 
-
-    // Inicializando o buscador => atribuindo o indexador e setando o ponto de início 
-    // para ele indexar as páginas
+    /**
+     * Inicializa o buscador, atribuindo o indexador e definindo o ponto de início para indexar as páginas.
+     * @param startPoint - O ponto de início para o indexador
+     */
     async initializeSearcher(startPoint?: string){
        await this.indexer.index(startPoint || this.defaultStartPoint)
 

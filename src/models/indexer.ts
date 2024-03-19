@@ -6,13 +6,13 @@ import { FileUtils } from '../utils/fileUtils.js';
 import got from "got";
 import { Page } from './page.js';
 
-// Classe encarreagada de indexar os dados das páginas a fim de pontuá-las depois com o buscador
+/** Classe encarreagada de indexar os dados das páginas a fim de pontuá-las depois com o buscador */
 export class Indexer {
 
-    // Meio de persistência das paginas
+    /** Meio de persistência das paginas */
     pageManager: PageManager = new PageManager();
 
-    // Aplica a indexação das páginas
+    /** Aplica a indexação das páginas */
     async index(siteUrl: string): Promise<void> {
 
         // Pegando a resposta da requisição do site
@@ -32,14 +32,14 @@ export class Indexer {
         // Carregando a página com o cheerio, que funciona semelhante ao beautiful soap
         const $ = load(body);
 
-        // Extraindo o título da página
+        /** Título da Página */
         const pageTitle: string = $('title').text() || $('h1').text();
 
         // Aqui eu já tenho todas as tags "anchor"
         const linksA: Cheerio<Element> = $('a');
         const anchorsArray = linksA.toArray();
 
-        // Vai guardar os links dessa página
+        /** Guarda os links da página. */
         const avaliableLinks: Array<string> = new Array<string>();
 
         // Povoando os links disponiveis com os encontrados nas tags <a>
@@ -77,6 +77,7 @@ export class Indexer {
 
     }
 
+    /** Exibe todas as páginas indexadas */
     printAllPages(): void{
         this.pageManager.printAllPages();
     }

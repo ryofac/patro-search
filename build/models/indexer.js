@@ -13,13 +13,13 @@ import { RequestNotCompletedError } from '../err/requestNotCompletedError.js';
 import { FileUtils } from '../utils/fileUtils.js';
 import got from "got";
 import { Page } from './page.js';
-// Classe encarreagada de indexar os dados das páginas a fim de pontuá-las depois com o buscador
+/** Classe encarreagada de indexar os dados das páginas a fim de pontuá-las depois com o buscador */
 export class Indexer {
     constructor() {
-        // Meio de persistência das paginas
+        /** Meio de persistência das paginas */
         this.pageManager = new PageManager();
     }
-    // Aplica a indexação das páginas
+    /** Aplica a indexação das páginas */
     index(siteUrl) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
@@ -36,12 +36,12 @@ export class Indexer {
             }
             // Carregando a página com o cheerio, que funciona semelhante ao beautiful soap
             const $ = load(body);
-            // Extraindo o título da página
+            /** Título da Página */
             const pageTitle = $('title').text() || $('h1').text();
             // Aqui eu já tenho todas as tags "anchor"
             const linksA = $('a');
             const anchorsArray = linksA.toArray();
-            // Vai guardar os links dessa página
+            /** Guarda os links da página. */
             const avaliableLinks = new Array();
             // Povoando os links disponiveis com os encontrados nas tags <a>
             anchorsArray.forEach(tagA => {
@@ -72,6 +72,7 @@ export class Indexer {
             }
         });
     }
+    /** Exibe todas as páginas indexadas */
     printAllPages() {
         this.pageManager.printAllPages();
     }

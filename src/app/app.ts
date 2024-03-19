@@ -5,6 +5,7 @@ import { Searcher } from "../models/searcher.js";
 import { Indexer } from "../models/indexer.js";
 
 export class App {
+    /** Referência da viewHandler */
     private viewHandler: ViewHandler = new ViewHandler();
 
     private indexer: Indexer = new Indexer();
@@ -13,12 +14,15 @@ export class App {
     private baseView : View = new MainMenuView(this.viewHandler, this.searcher);
     
 
+    /** Inicia a aplização */
     public async run(): Promise<void>{
-        
+        // Inicializa o indexador
         await this.searcher.initializeSearcher();
 
+        // Inicializa a view base
         this.viewHandler.goToView(this.baseView);
 
+        // Loop principal
         do {
             await this.viewHandler.getActualView()?.execute();
         }
